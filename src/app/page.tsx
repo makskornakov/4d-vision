@@ -1,95 +1,154 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client';
+import { useEffect, useState } from 'react';
+import AnimatedCanvas from './components/Canvas';
+import { Settings3D } from '@/classes/3dprojection';
 
 export default function Home() {
+  const [settings, setSettings] = useState<Settings3D>({
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+    scale: {
+      value: 1,
+    },
+  });
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main>
+      <h1>Canvas 3D - 4D experiments</h1>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '60%',
+          height: '10rem',
+          outline: '1px solid red',
+        }}
+      >
+        <label
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '40%',
+            justifyContent: 'center',
+            gap: '.5rem',
+          }}
+        >
+          Scale:
+          <input
+            type="range"
+            min=".2"
+            max="3"
+            step=".01"
+            value={settings.scale.value}
+            onChange={(e) =>
+              setSettings((prev) => {
+                const newSettings = { ...prev };
+                newSettings.scale.value = e.target.valueAsNumber;
+                return newSettings;
+              })
+            }
+          />
+          <span>{settings.scale.value}</span>
+        </label>
+        <div
+          style={{
+            width: '70%',
+            height: '100%',
+            outline: '1px solid blue',
+            display: 'flex',
+            justifyContent: 'space-evenly',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            // rowGap: '1rem',
+          }}
+        >
+          {/* 3 labels with inputs for xyz rotation */}
+          <label
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '.5rem',
+            }}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+            X rotation:
+            <input
+              type="range"
+              min="0"
+              max="360"
+              step="1"
+              value={settings.rotation.x}
+              onChange={(e) =>
+                setSettings((prev) => {
+                  const newSettings = { ...prev };
+                  newSettings.rotation.x = e.target.valueAsNumber;
+                  return newSettings;
+                })
+              }
             />
-          </a>
+            <span>{settings.rotation.x}</span>
+          </label>
+          <label
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '.5rem',
+            }}
+          >
+            Y rotation:
+            <input
+              type="range"
+              min="0"
+              max="360"
+              step="1"
+              value={settings.rotation.y}
+              onChange={(e) =>
+                setSettings((prev) => {
+                  const newSettings = { ...prev };
+                  newSettings.rotation.y = e.target.valueAsNumber;
+                  return newSettings;
+                })
+              }
+            />
+            <span>{settings.rotation.y}</span>
+          </label>
+          <label
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '.5rem',
+            }}
+          >
+            Z rotation:
+            <input
+              type="range"
+              min="0"
+              max="360"
+              step="1"
+              value={settings.rotation.z}
+              onChange={(e) =>
+                setSettings((prev) => {
+                  const newSettings = { ...prev };
+                  newSettings.rotation.z = e.target.valueAsNumber;
+                  return newSettings;
+                })
+              }
+            />
+            <span>{settings.rotation.z}</span>
+          </label>
         </div>
       </div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <AnimatedCanvas settings={settings} />
     </main>
-  )
+  );
 }
